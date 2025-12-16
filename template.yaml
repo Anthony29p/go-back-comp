@@ -22,6 +22,16 @@ Resources:
           Properties:
             Path: /files
             Method: get
+        PostPresignedUpload:
+          Type: Api
+          Properties:
+            Path: /files/presigned/upload
+            Method: post
+        PostPresignedDownload:
+          Type: Api
+          Properties:
+            Path: /files/presigned/download
+            Method: post
     Metadata:
       BuildMethod: go1.x
 
