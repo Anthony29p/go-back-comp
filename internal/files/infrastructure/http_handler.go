@@ -48,6 +48,25 @@ func (h *FileHandler) PostPresignedUpload(c *gin.Context) {
 }
 
 func (h *FileHandler) PostPresignedDownload(c *gin.Context) {
-	result := h.service.GetPresignedDownload()
-	c.String(200, result)
+	var request struct {
+		FileID   string `json:"fileId" binding:"required"`
+		FileName string `json:"fileName" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(400, gin.H{
+			"error": "fileId and fileName are required",
+		})
+		return
+	}
+
+	result, err := h.service.GetPresignedDownload(request.FileID, request.FileName)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "failed to generate presigned download URL",
+		})
+		return
+	}
+
+	c.JSON(200, result)
 }

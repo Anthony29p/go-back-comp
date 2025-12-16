@@ -48,3 +48,18 @@ func (p *S3Provider) GeneratePresignedUploadURL(ctx context.Context, fileName st
 
 	return fileID, presignedRequest.URL, nil
 }
+
+func (p *S3Provider) GeneratePresignedDownloadURL(ctx context.Context, fileID string, fileName string) (presignedURL string, err error) {
+	key := fmt.Sprintf("%s-%s", fileID, fileName)
+
+	presignedRequest, err := p.presignClient.PresignGetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(p.bucketName),
+		Key:    aws.String(key),
+	}, s3.WithPresignExpires(15*time.Minute))
+
+	if err != nil {
+		return "", fmt.Errorf("error generating presigned download URL: %w", err)
+	}
+
+	return presignedRequest.URL, nil
+}

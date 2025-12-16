@@ -34,6 +34,13 @@ func (s *fileService) GetPresignedUpload(fileName string) (*domain.PresignedURLR
 	}, nil
 }
 
-func (s *fileService) GetPresignedDownload() string {
-	return s.repo.GetPresignedDownloadURL()
+func (s *fileService) GetPresignedDownload(fileID string, fileName string) (*domain.PresignedDownloadURLResponse, error) {
+	presignedURL, err := s.storage.GeneratePresignedDownloadURL(context.Background(), fileID, fileName)
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.PresignedDownloadURLResponse{
+		DownloadURL: presignedURL,
+	}, nil
 }

@@ -64,3 +64,28 @@ Genera una URL prefirmada que permite subir un archivo directamente a S3.
 **Errores:**
 - `400`: fileName es requerido
 - `500`: Error al generar la URL prefirmada
+
+### 2. Generar URL prefirmada para descargar archivo
+
+Genera una URL prefirmada que permite descargar un archivo directamente desde S3.
+
+**Endpoint:** `POST /files/presigned/download`
+
+**Request:**
+```json
+{
+  "fileId": "123e4567-e89b-12d3-a456-426614174000",
+  "fileName": "documento.pdf"
+}
+```
+
+**Response (200):**
+```json
+{
+  "downloadUrl": "https://my-bucket.s3.amazonaws.com/..."
+}
+```
+
+**Errores:**
+- `400`: fileId y fileName son requeridos
+- `500`: Error al generar la URL prefirmada de descarga

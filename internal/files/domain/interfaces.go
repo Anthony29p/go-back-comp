@@ -1,9 +1,14 @@
 package domain
 
-// PresignedURLResponse representa la respuesta de una URL prefirmada
+// PresignedURLResponse representa la respuesta de una URL prefirmada para upload
 type PresignedURLResponse struct {
 	FileID    string `json:"fileId"`
 	UploadURL string `json:"uploadUrl"`
+}
+
+// PresignedDownloadURLResponse representa la respuesta de una URL prefirmada para download
+type PresignedDownloadURLResponse struct {
+	DownloadURL string `json:"downloadUrl"`
 }
 
 // FileRepository define los métodos para acceso a datos
@@ -17,5 +22,5 @@ type FileRepository interface {
 type FileService interface {
 	GetFiles() string
 	GetPresignedUpload(fileName string) (*PresignedURLResponse, error)
-	GetPresignedDownload() string
+	GetPresignedDownload(fileID string, fileName string) (*PresignedDownloadURLResponse, error)
 }
