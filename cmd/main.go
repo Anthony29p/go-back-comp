@@ -5,23 +5,27 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
+	"github.com/gin-gonic/gin"
 )
 
-type Request struct {
-	Name string `json:"name"`
+var ginLambda *ginadapter.GinLambda
+
+func init() {
+	r := gin.Default()
+
+	r.GET("/files", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello World 2",
+		})
+	})
+	ginLambda = ginadapter.New(r)
 }
 
-type Response struct {
-	Message string `json:"message"`
-}
-
-func HandleRequest(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-
-	return events.APIGatewayProxyResponse{
-		Body: "Hello World",
-	}, nil
+func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+	return ginLambda.ProxyWithContext(ctx, request)
 }
 
 func main() {
-	lambda.Start(HandleRequest)
+	lambda.Start(Handler)
 }
