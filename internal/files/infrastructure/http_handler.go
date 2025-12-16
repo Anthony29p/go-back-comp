@@ -1,17 +1,35 @@
 package file_infrastructure
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-back-comp/internal/files/domain"
 
-func GetFiles(c *gin.Context) {
+	"github.com/gin-gonic/gin"
+)
+
+type FileHandler struct {
+	service domain.FileService
+}
+
+// NewFileHandler crea una nueva instancia del handler
+func NewFileHandler(service domain.FileService) *FileHandler {
+	return &FileHandler{
+		service: service,
+	}
+}
+
+func (h *FileHandler) GetFiles(c *gin.Context) {
+	result := h.service.GetFiles()
 	c.JSON(200, gin.H{
-		"message": "Hello World 2",
+		"message": result,
 	})
 }
 
-func PostPresignedUpload(c *gin.Context) {
-	c.String(200, "presigned upload URL")
+func (h *FileHandler) PostPresignedUpload(c *gin.Context) {
+	result := h.service.GetPresignedUpload()
+	c.String(200, result)
 }
 
-func PostPresignedDownload(c *gin.Context) {
-	c.String(200, "presigned download URL")
+func (h *FileHandler) PostPresignedDownload(c *gin.Context) {
+	result := h.service.GetPresignedDownload()
+	c.String(200, result)
 }

@@ -1,12 +1,21 @@
 package file_infrastructure
 
-import "github.com/gin-gonic/gin"
+import (
+	"go-back-comp/internal/files/application"
+
+	"github.com/gin-gonic/gin"
+)
 
 func RegisterRoutes(r *gin.Engine) {
+	// Inyección de dependencias
+	repo := NewFileRepository()
+	service := application.NewFileService(repo)
+	handler := NewFileHandler(service)
+
 	filesGroup := r.Group("/files")
 	{
-		filesGroup.GET("", GetFiles)
-		filesGroup.POST("/presigned/upload", PostPresignedUpload)
-		filesGroup.POST("/presigned/download", PostPresignedDownload)
+		filesGroup.GET("", handler.GetFiles)
+		filesGroup.POST("/presigned/upload", handler.PostPresignedUpload)
+		filesGroup.POST("/presigned/download", handler.PostPresignedDownload)
 	}
 }
