@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple Go Lambda function
+
+Globals:
+  Function:
+    Timeout: 5
+    MemorySize: 128
+
+Resources:
+  FilesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: cmd/
+      Handler: bootstrap
+      Runtime: provided.al2023
+      Architectures:
+        - x86_64
+      Events:
+        GetFiles:
+          Type: Api
+          Properties:
+            Path: /files
+            Method: get
+    Metadata:
+      BuildMethod: go1.x
+
