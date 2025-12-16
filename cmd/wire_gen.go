@@ -9,13 +9,25 @@ package main
 import (
 	file_application "go-back-comp/internal/files/application"
 	file_infrastructure "go-back-comp/internal/files/infrastructure"
+	shared_domain "go-back-comp/internal/shared/domain"
+	shared_infrastructure "go-back-comp/internal/shared/infrastructure"
 )
 
 // Injectors from wire.go:
 
-func InitializeFileHandler() *file_infrastructure.FileHandler {
+func InitializeFileHandler() (*file_infrastructure.FileHandler, error) {
 	fileRepository := file_infrastructure.NewFileRepository()
-	fileService := file_application.NewFileService(fileRepository)
+	fileStorage, err := provideS3Storage()
+	if err != nil {
+		return nil, err
+	}
+	fileService := file_application.NewFileService(fileRepository, fileStorage)
 	fileHandler := file_infrastructure.NewFileHandler(fileService)
-	return fileHandler
+	return fileHandler, nil
+}
+
+// wire.go:
+
+func provideS3Storage() (shared_domain.FileStorage, error) {
+	return shared_infrastructure.NewS3Provider("my-bucket-name")
 }

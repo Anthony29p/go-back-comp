@@ -25,8 +25,26 @@ func (h *FileHandler) GetFiles(c *gin.Context) {
 }
 
 func (h *FileHandler) PostPresignedUpload(c *gin.Context) {
-	result := h.service.GetPresignedUpload()
-	c.String(200, result)
+	var request struct {
+		FileName string `json:"fileName" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(400, gin.H{
+			"error": "fileName is required",
+		})
+		return
+	}
+
+	result, err := h.service.GetPresignedUpload(request.FileName)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "failed to generate presigned URL",
+		})
+		return
+	}
+
+	c.JSON(200, result)
 }
 
 func (h *FileHandler) PostPresignedDownload(c *gin.Context) {

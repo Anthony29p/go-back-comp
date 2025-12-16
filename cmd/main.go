@@ -16,7 +16,10 @@ var ginLambda *ginadapter.GinLambda
 func init() {
 	r := gin.Default()
 
-	fileHandler := InitializeFileHandler()
+	fileHandler, err := InitializeFileHandler()
+	if err != nil {
+		panic("failed to initialize file handler: " + err.Error())
+	}
 	routes.SetupRoutes(r, fileHandler)
 
 	ginLambda = ginadapter.New(r)
