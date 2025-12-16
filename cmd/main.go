@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 
+	"go-back-comp/internal/routes"
+
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
@@ -14,11 +16,8 @@ var ginLambda *ginadapter.GinLambda
 func init() {
 	r := gin.Default()
 
-	r.GET("/files", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello World 2",
-		})
-	})
+	routes.SetupRoutes(r)
+
 	ginLambda = ginadapter.New(r)
 }
 
