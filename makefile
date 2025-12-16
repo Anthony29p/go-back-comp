@@ -6,3 +6,9 @@ build:
 
 deploy: 
 	sam build && sam deploy --guided
+
+deps:
+   	go mod download
+
+wire:
+   	cd cmd && wire
