@@ -1,17 +1,8 @@
 package file_infrastructure
 
-import (
-	"go-back-comp/internal/files/application"
+import "github.com/gin-gonic/gin"
 
-	"github.com/gin-gonic/gin"
-)
-
-func RegisterRoutes(r *gin.Engine) {
-	// Inyección de dependencias
-	repo := NewFileRepository()
-	service := application.NewFileService(repo)
-	handler := NewFileHandler(service)
-
+func RegisterRoutes(r *gin.Engine, handler *FileHandler) {
 	filesGroup := r.Group("/files")
 	{
 		filesGroup.GET("", handler.GetFiles)

@@ -7,6 +7,6 @@ import (
 )
 
 // SetupRoutes configures all application routes
-func SetupRoutes(r *gin.Engine) {
-	file_infrastructure.RegisterRoutes(r)
+func SetupRoutes(r *gin.Engine, fileHandler *file_infrastructure.FileHandler) {
+	file_infrastructure.RegisterRoutes(r, fileHandler)
 }

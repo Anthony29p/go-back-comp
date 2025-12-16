@@ -10,7 +10,7 @@ func NewFileRepository() domain.FileRepository {
 }
 
 func (r *fileRepository) GetAllFiles() string {
-	return "Hello World 2"
+	return "Hello World 3"
 }
 
 func (r *fileRepository) GetPresignedUploadURL() string {

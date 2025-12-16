@@ -1,4 +1,4 @@
-package application
+package file_application
 
 import "go-back-comp/internal/files/domain"
 
